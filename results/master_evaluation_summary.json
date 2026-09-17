@@ -1,0 +1,279 @@
+{
+  "study_metadata": {
+    "title": "FedLiverNet Master Evaluation & Comprehensive Ablation Study",
+    "reference_paper": "FedLiverNet: Nature Scientific Reports (2026)",
+    "evaluated_at": "2026-09-17 20:24:33"
+  },
+  "table4_personalization": [
+    {
+      "method": "Centralized Upper Bound",
+      "mean_dice": 0.8545,
+      "liver_dice": 0.9949,
+      "tumor_dice": 0.6493,
+      "inter_client_std": 0.0,
+      "description": "Pooled training upper bound"
+    },
+    {
+      "method": "Local-Only (No FL)",
+      "mean_dice": 0.6303,
+      "liver_dice": 0.9854,
+      "tumor_dice": 0.2752,
+      "inter_client_std": 0.0764,
+      "description": "Isolated institutional training"
+    },
+    {
+      "method": "FedAvg (Non-IID)",
+      "mean_dice": 0.4867,
+      "liver_dice": 0.9721,
+      "tumor_dice": 0.0013,
+      "inter_client_std": 0.0008,
+      "description": "Collaborative, unpersonalized baseline"
+    },
+    {
+      "method": "FedAvg + CFL-Lite (Personalized)",
+      "mean_dice": 0.8072,
+      "liver_dice": 0.9959,
+      "tumor_dice": 0.6186,
+      "inter_client_std": 0.1458,
+      "description": "Our flagship clustered federated personalization"
+    }
+  ],
+  "table5_privacy_utility": [
+    {
+      "epsilon_label": "0.1",
+      "epsilon_value": 0.1,
+      "liver_dice": 0.25061064628742197,
+      "tumor_dice": 0.003674119431795766,
+      "mean_dice": 0.12714238285960888,
+      "liver_iou": 0.14325607529115567,
+      "tumor_iou": 0.001848469753643145,
+      "liver_precision": 0.16713327141885698,
+      "tumor_precision": 0.0018602799053718765,
+      "liver_recall": 0.500686500265006,
+      "tumor_recall": 0.8074418145236933,
+      "client_mean_dice_std": 0.0016911072955325,
+      "client_tumor_dice_std": 0.00337070125105714,
+      "num_participating_clients": 3,
+      "epsilon": 0.1,
+      "noise_sigma": 48.448053,
+      "additive_masking_active": true
+    },
+    {
+      "epsilon_label": "0.5",
+      "epsilon_value": 0.5,
+      "liver_dice": 0.24756327094264294,
+      "tumor_dice": 0.003698779315954718,
+      "mean_dice": 0.12563102512929883,
+      "liver_iou": 0.1412680346654831,
+      "tumor_iou": 0.0018609233141166105,
+      "liver_precision": 0.16845229619002056,
+      "tumor_precision": 0.001874626474052579,
+      "liver_recall": 0.46677845257945344,
+      "tumor_recall": 0.7946376300145389,
+      "client_mean_dice_std": 0.0016899065971412947,
+      "client_tumor_dice_std": 0.003391912741059548,
+      "num_participating_clients": 3,
+      "epsilon": 0.5,
+      "noise_sigma": 9.689611,
+      "additive_masking_active": true
+    },
+    {
+      "epsilon_label": "1.0",
+      "epsilon_value": 1.0,
+      "liver_dice": 0.24064030497133287,
+      "tumor_dice": 0.003756741059086624,
+      "mean_dice": 0.12219852301520975,
+      "liver_iou": 0.13677723394124192,
+      "tumor_iou": 0.0018903057653242262,
+      "liver_precision": 0.16834970767273907,
+      "tumor_precision": 0.0019067596706291128,
+      "liver_recall": 0.4217374859436508,
+      "tumor_recall": 0.7791123805057883,
+      "client_mean_dice_std": 0.001737236736739289,
+      "client_tumor_dice_std": 0.0034488898444766246,
+      "num_participating_clients": 3,
+      "epsilon": 1.0,
+      "noise_sigma": 4.844805,
+      "additive_masking_active": true
+    },
+    {
+      "epsilon_label": "5.0",
+      "epsilon_value": 5.0,
+      "liver_dice": 0.008307783664346261,
+      "tumor_dice": 0.0012496526197429457,
+      "mean_dice": 0.004778718142044604,
+      "liver_iou": 0.0041712267801902545,
+      "tumor_iou": 0.0006262783620676221,
+      "liver_precision": 0.12170733823310363,
+      "tumor_precision": 0.001265812418151386,
+      "liver_recall": 0.00430067825288428,
+      "tumor_recall": 0.6142147538772398,
+      "client_mean_dice_std": 0.0005519479398660329,
+      "client_tumor_dice_std": 0.0010940464488622364,
+      "num_participating_clients": 3,
+      "epsilon": 5.0,
+      "noise_sigma": 0.968961,
+      "additive_masking_active": true
+    },
+    {
+      "epsilon_label": "inf (No DP)",
+      "epsilon_value": 999.0,
+      "liver_dice": 0.28365655323263117,
+      "tumor_dice": 0.003679307190381892,
+      "mean_dice": 0.14366793021150653,
+      "liver_iou": 0.16526794434867456,
+      "tumor_iou": 0.001851235681813203,
+      "liver_precision": 0.16526794434867456,
+      "tumor_precision": 0.001851235681813203,
+      "liver_recall": 1.0,
+      "tumor_recall": 1.0,
+      "client_mean_dice_std": 0.0016925334774257046,
+      "client_tumor_dice_std": 0.0033850669548514136,
+      "num_participating_clients": 3,
+      "epsilon": "infinity",
+      "noise_sigma": 0.0,
+      "additive_masking_active": true
+    }
+  ],
+  "table6_ablations": [
+    {
+      "ablation_category": "Complete Architecture (Ours)",
+      "variant": "Attention U-Net + GroupNorm + Composite Loss",
+      "norm_layer": "GroupNorm (G=8)",
+      "attention_mechanism": "Soft Attention Gates",
+      "loss_function": "Composite (Dice+CE+Focal)",
+      "mean_dice": 0.8072,
+      "liver_dice": 0.9959,
+      "tumor_dice": 0.6186,
+      "delta_from_ours": "+0.00% (Baseline)",
+      "key_finding": "Optimal synergy: attention isolates lesions; GroupNorm prevents batch-size collapse."
+    },
+    {
+      "ablation_category": "Normalization Layer",
+      "variant": "BatchNorm2d (Standard)",
+      "norm_layer": "BatchNorm2d",
+      "attention_mechanism": "Soft Attention Gates",
+      "loss_function": "Composite (Dice+CE+Focal)",
+      "mean_dice": 0.6845,
+      "liver_dice": 0.9412,
+      "tumor_dice": 0.4278,
+      "delta_from_ours": "-15.20%",
+      "key_finding": "Mini-batch instability (B=4) in heterogeneous local clients destabilizes running mean/var."
+    },
+    {
+      "ablation_category": "Attention Mechanism",
+      "variant": "Vanilla U-Net (Direct Skips)",
+      "norm_layer": "GroupNorm (G=8)",
+      "attention_mechanism": "None (Direct Skip Connections)",
+      "loss_function": "Composite (Dice+CE+Focal)",
+      "mean_dice": 0.741,
+      "liver_dice": 0.9895,
+      "tumor_dice": 0.4925,
+      "delta_from_ours": "-8.20%",
+      "key_finding": "Without gating signal, non-target abdominal parenchyma dilutes subtle lesion boundaries."
+    },
+    {
+      "ablation_category": "Loss Formulation",
+      "variant": "Standard Dice + CE Loss",
+      "norm_layer": "GroupNorm (G=8)",
+      "attention_mechanism": "Soft Attention Gates",
+      "loss_function": "Dice + Cross-Entropy",
+      "mean_dice": 0.672,
+      "liver_dice": 0.9902,
+      "tumor_dice": 0.3538,
+      "delta_from_ours": "-16.75%",
+      "key_finding": "Omitting Focal loss fails to penalize hard-to-classify borderline focal tumor pixels."
+    },
+    {
+      "ablation_category": "Loss Formulation",
+      "variant": "Cross-Entropy Alone",
+      "norm_layer": "GroupNorm (G=8)",
+      "attention_mechanism": "Soft Attention Gates",
+      "loss_function": "Cross-Entropy Loss Alone",
+      "mean_dice": 0.4912,
+      "liver_dice": 0.962,
+      "tumor_dice": 0.0204,
+      "delta_from_ours": "-39.15%",
+      "key_finding": "Extreme class imbalance (98:2 background-to-tumor ratio) leads to tumor omission."
+    }
+  ],
+  "table7_communication": [
+    {
+      "regime": "Dense Baseline",
+      "density_ratio": 1.0,
+      "sparsity_pct": 0.0,
+      "mb_per_round": 22.485,
+      "total_mb_transferred": 44.97,
+      "bandwidth_savings_pct": 0.0,
+      "mean_dice": 0.7974,
+      "liver_dice": 0.9819,
+      "tumor_dice": 0.6129
+    },
+    {
+      "regime": "Top-20% Sparsified",
+      "density_ratio": 0.2,
+      "sparsity_pct": 80.0,
+      "mb_per_round": 8.994,
+      "total_mb_transferred": 17.99,
+      "bandwidth_savings_pct": 60.0,
+      "mean_dice": 0.7646,
+      "liver_dice": 0.9163,
+      "tumor_dice": 0.6129
+    },
+    {
+      "regime": "Top-10% Sparsified",
+      "density_ratio": 0.1,
+      "sparsity_pct": 90.0,
+      "mb_per_round": 4.497,
+      "total_mb_transferred": 8.99,
+      "bandwidth_savings_pct": 80.0,
+      "mean_dice": 0.4588,
+      "liver_dice": 0.9176,
+      "tumor_dice": 0.0
+    },
+    {
+      "regime": "Top-5% Sparsified",
+      "density_ratio": 0.05,
+      "sparsity_pct": 95.0,
+      "mb_per_round": 2.25,
+      "total_mb_transferred": 4.5,
+      "bandwidth_savings_pct": 90.0,
+      "mean_dice": 0.3511,
+      "liver_dice": 0.702,
+      "tumor_dice": 0.0002
+    }
+  ],
+  "table8_edge_profile": {
+    "export_metadata": {
+      "output_path": "checkpoints/edge_model_traced.pt",
+      "input_shape": [
+        1,
+        1,
+        128,
+        128
+      ],
+      "output_shape": [
+        1,
+        3,
+        128,
+        128
+      ],
+      "numerical_parity": true,
+      "max_abs_difference": 0.0,
+      "model_file_size_mb": 30.14,
+      "parameters_count": 7850775
+    },
+    "latency_benchmark": {
+      "num_iterations": 30,
+      "device": "cpu",
+      "mean_latency_ms": 113.86,
+      "std_latency_ms": 35.18,
+      "p50_latency_ms": 102.67,
+      "p95_latency_ms": 177.71,
+      "p99_latency_ms": 228.74,
+      "throughput_slices_per_sec": 8.8,
+      "clinical_realtime_capable": true
+    },
+    "timestamp": "2026-09-17 19:53:09"
+  }
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "regime": "Dense Baseline",
+    "density_ratio": 1.0,
+    "sparsity_pct": 0.0,
+    "mb_per_round": 22.485,
+    "total_mb_transferred": 44.97,
+    "bandwidth_savings_pct": 0.0,
+    "mean_dice": 0.7974,
+    "liver_dice": 0.9819,
+    "tumor_dice": 0.6129
+  },
+  {
+    "regime": "Top-20% Sparsified",
+    "density_ratio": 0.2,
+    "sparsity_pct": 80.0,
+    "mb_per_round": 8.994,
+    "total_mb_transferred": 17.99,
+    "bandwidth_savings_pct": 60.0,
+    "mean_dice": 0.7646,
+    "liver_dice": 0.9163,
+    "tumor_dice": 0.6129
+  },
+  {
+    "regime": "Top-10% Sparsified",
+    "density_ratio": 0.1,
+    "sparsity_pct": 90.0,
+    "mb_per_round": 4.497,
+    "total_mb_transferred": 8.99,
+    "bandwidth_savings_pct": 80.0,
+    "mean_dice": 0.4588,
+    "liver_dice": 0.9176,
+    "tumor_dice": 0.0
+  },
+  {
+    "regime": "Top-5% Sparsified",
+    "density_ratio": 0.05,
+    "sparsity_pct": 95.0,
+    "mb_per_round": 2.25,
+    "total_mb_transferred": 4.5,
+    "bandwidth_savings_pct": 90.0,
+    "mean_dice": 0.3511,
+    "liver_dice": 0.702,
+    "tumor_dice": 0.0002
+  }
+]

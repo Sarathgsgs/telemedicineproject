@@ -1,0 +1,62 @@
+{
+  "split_type": "iid",
+  "num_clients": 3,
+  "num_rounds": 3,
+  "local_epochs": 1,
+  "batch_size": 4,
+  "total_time_seconds": 223.0,
+  "best_mean_dice": 0.5905,
+  "final_mean_dice": 0.5905,
+  "final_tumor_dice": 0.2135,
+  "final_inter_client_std": 0.0121,
+  "history": [
+    {
+      "round": 1,
+      "round_time_sec": 80.48,
+      "liver_dice": 0.8953140925072866,
+      "tumor_dice": 2.1820802606327055e-08,
+      "mean_dice": 0.44765705716404464,
+      "liver_iou": 0.8104696504509069,
+      "tumor_iou": 2.1820802606327055e-08,
+      "liver_precision": 0.8104696504509069,
+      "tumor_precision": 8.418895185900489e-08,
+      "liver_recall": 1.0,
+      "tumor_recall": 0.2333333352878189,
+      "client_mean_dice_std": 6.915745940012565e-05,
+      "client_tumor_dice_std": 8.417391551782265e-09,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 2,
+      "round_time_sec": 63.39,
+      "liver_dice": 0.9620738804405562,
+      "tumor_dice": 4.140669322225613e-08,
+      "mean_dice": 0.4810369609236247,
+      "liver_iou": 0.926920403066424,
+      "tumor_iou": 4.140669322225613e-08,
+      "liver_precision": 0.9297785591273268,
+      "tumor_precision": 2.086904296146653e-07,
+      "liver_recall": 0.9966946726990403,
+      "tumor_recall": 0.2333333352878189,
+      "client_mean_dice_std": 0.00010858504160519979,
+      "client_tumor_dice_std": 1.8142292981723347e-08,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 3,
+      "round_time_sec": 79.12,
+      "liver_dice": 0.9676339539586415,
+      "tumor_dice": 0.2134597424948998,
+      "mean_dice": 0.5905468482267706,
+      "liver_iou": 0.9372982083354946,
+      "tumor_iou": 0.13627571606191544,
+      "liver_precision": 0.937674488296982,
+      "tumor_precision": 0.21429747834692023,
+      "liver_recall": 0.9995722155541588,
+      "tumor_recall": 0.4543911120511915,
+      "client_mean_dice_std": 0.012070281445061082,
+      "client_tumor_dice_std": 0.024352282059940007,
+      "num_participating_clients": 3
+    }
+  ]
+}

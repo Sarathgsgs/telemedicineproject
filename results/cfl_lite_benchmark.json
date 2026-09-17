@@ -1,0 +1,150 @@
+{
+  "method": "CFL-Lite (Clustered FL + Personalization Fine-Tuning)",
+  "num_clients": 3,
+  "n_clusters": 2,
+  "num_rounds": 3,
+  "local_epochs": 1,
+  "fine_tune_epochs": 1,
+  "total_time_seconds": 369.3,
+  "best_mean_dice": 0.8072,
+  "final_mean_dice": 0.8072,
+  "final_tumor_dice": 0.6186,
+  "final_inter_client_std": 0.1458,
+  "final_clusters": {
+    "1": [
+      0
+    ],
+    "0": [
+      1,
+      2
+    ]
+  },
+  "history": [
+    {
+      "round": 1,
+      "round_time_sec": 138.71,
+      "cluster_mapping": {
+        "0": [
+          0,
+          1,
+          2
+        ]
+      },
+      "liver_dice": 0.9879942842935642,
+      "tumor_dice": 0.5161290522925711,
+      "mean_dice": 0.7520616682930676,
+      "liver_iou": 0.9763066272792575,
+      "tumor_iou": 0.5161290522925711,
+      "liver_precision": 0.9772177520874782,
+      "tumor_precision": 0.7419355384792503,
+      "liver_recall": 0.9990499194368299,
+      "tumor_recall": 0.6129032275667802,
+      "client_mean_dice_std": 0.20866286739529363,
+      "client_tumor_dice_std": 0.4132782064047938,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 2,
+      "round_time_sec": 105.24,
+      "cluster_mapping": {
+        "1": [
+          0
+        ],
+        "0": [
+          1,
+          2
+        ]
+      },
+      "liver_dice": 0.991537682644285,
+      "tumor_dice": 0.48387109853439314,
+      "mean_dice": 0.737704390589339,
+      "liver_iou": 0.98324280271786,
+      "tumor_iou": 0.48387109853439314,
+      "liver_precision": 0.9852459299488687,
+      "tumor_precision": 0.8709678709676129,
+      "liver_recall": 0.9979479451159117,
+      "tumor_recall": 0.6129032275667802,
+      "client_mean_dice_std": 0.06978454565016495,
+      "client_tumor_dice_std": 0.14024832516593222,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 3,
+      "round_time_sec": 125.35,
+      "cluster_mapping": {
+        "1": [
+          0
+        ],
+        "0": [
+          1,
+          2
+        ]
+      },
+      "liver_dice": 0.9958781986968187,
+      "tumor_dice": 0.6185570928235303,
+      "mean_dice": 0.8072176457601746,
+      "liver_iou": 0.9917919663038485,
+      "tumor_iou": 0.5916978638541517,
+      "liver_precision": 0.9945640723204823,
+      "tumor_precision": 0.8406090204999038,
+      "liver_recall": 0.997197411254097,
+      "tumor_recall": 0.720248849100475,
+      "client_mean_dice_std": 0.1457868278824196,
+      "client_tumor_dice_std": 0.2924579368639096,
+      "num_participating_clients": 3
+    }
+  ],
+  "similarity_matrices": [
+    [
+      [
+        1.0,
+        0.6012417078018188,
+        0.5519564747810364
+      ],
+      [
+        0.6012417078018188,
+        1.0,
+        0.6077743768692017
+      ],
+      [
+        0.5519564747810364,
+        0.6077743768692017,
+        1.0
+      ]
+    ],
+    [
+      [
+        1.0,
+        0.3428162634372711,
+        0.42337241768836975
+      ],
+      [
+        0.3428162634372711,
+        1.0,
+        0.5930024981498718
+      ],
+      [
+        0.42337241768836975,
+        0.5930024981498718,
+        1.0
+      ]
+    ],
+    [
+      [
+        1.0,
+        0.022693587467074394,
+        0.028047218918800354
+      ],
+      [
+        0.022693587467074394,
+        1.0,
+        0.2957538366317749
+      ],
+      [
+        0.028047218918800354,
+        0.2957538366317749,
+        1.0
+      ]
+    ]
+  ]
+}

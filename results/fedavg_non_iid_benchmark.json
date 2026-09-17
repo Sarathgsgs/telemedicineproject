@@ -1,0 +1,62 @@
+{
+  "split_type": "non_iid",
+  "num_clients": 3,
+  "num_rounds": 3,
+  "local_epochs": 1,
+  "batch_size": 4,
+  "total_time_seconds": 431.8,
+  "best_mean_dice": 0.5203,
+  "final_mean_dice": 0.4867,
+  "final_tumor_dice": 0.0013,
+  "final_inter_client_std": 0.0008,
+  "history": [
+    {
+      "round": 1,
+      "round_time_sec": 89.86,
+      "liver_dice": 0.8985351456439614,
+      "tumor_dice": 3.604308897749555e-05,
+      "mean_dice": 0.4492855943664694,
+      "liver_iou": 0.8157641574370631,
+      "tumor_iou": 1.8031897278260726e-05,
+      "liver_precision": 0.817210815241825,
+      "tumor_precision": 1.96222871720877e-05,
+      "liver_recall": 0.9978347693748443,
+      "tumor_recall": 0.6131241732126376,
+      "client_mean_dice_std": 8.948127867357385e-05,
+      "client_tumor_dice_std": 4.788263110284906e-05,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 2,
+      "round_time_sec": 175.91,
+      "liver_dice": 0.9516508174013482,
+      "tumor_dice": 0.08889785317041242,
+      "mean_dice": 0.5202743352858803,
+      "liver_iou": 0.9077617978370095,
+      "tumor_iou": 0.05214803416093003,
+      "liver_precision": 0.9077692062079941,
+      "tumor_precision": 0.05694507461038881,
+      "liver_recall": 0.9999910650730736,
+      "tumor_recall": 0.8380952497880816,
+      "client_mean_dice_std": 0.04115034502803211,
+      "client_tumor_dice_std": 0.08232148873406124,
+      "num_participating_clients": 3
+    },
+    {
+      "round": 3,
+      "round_time_sec": 166.03,
+      "liver_dice": 0.9720863744399786,
+      "tumor_dice": 0.0012600828896645183,
+      "mean_dice": 0.48667322866482154,
+      "liver_iou": 0.945688930759819,
+      "tumor_iou": 0.0006425931735554378,
+      "liver_precision": 0.9489995998322814,
+      "tumor_precision": 0.0008813705826746476,
+      "liver_recall": 0.9963247667242888,
+      "tumor_recall": 0.6151126840253545,
+      "client_mean_dice_std": 0.0007979217427103757,
+      "client_tumor_dice_std": 0.0016740216393620296,
+      "num_participating_clients": 3
+    }
+  ]
+}

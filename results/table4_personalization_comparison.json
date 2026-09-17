@@ -1,0 +1,30 @@
+{
+  "Centralized Upper Bound": {
+    "mean_dice": 0.8545,
+    "liver_dice": 0.9949,
+    "tumor_dice": 0.6493,
+    "inter_client_std": 0.0,
+    "description": "Pooled training upper bound"
+  },
+  "Local-Only (No FL)": {
+    "mean_dice": 0.6303,
+    "liver_dice": 0.9854,
+    "tumor_dice": 0.2752,
+    "inter_client_std": 0.0764,
+    "description": "Isolated institutional training"
+  },
+  "FedAvg (Non-IID)": {
+    "mean_dice": 0.4867,
+    "liver_dice": 0.9721,
+    "tumor_dice": 0.0013,
+    "inter_client_std": 0.0008,
+    "description": "Collaborative, unpersonalized baseline"
+  },
+  "FedAvg + CFL-Lite (Personalized)": {
+    "mean_dice": 0.8072,
+    "liver_dice": 0.9959,
+    "tumor_dice": 0.6186,
+    "inter_client_std": 0.1458,
+    "description": "Our flagship clustered federated personalization"
+  }
+}
