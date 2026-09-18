@@ -563,6 +563,42 @@ function initializeApp() {
     }
   });
 
+  // Theme Toggle Setup (Default: Clinical Medical Bright Mode)
+  const btnThemeToggle = document.getElementById("btnThemeToggle");
+  const themeToggleText = document.getElementById("themeToggleText");
+  const themeIcon = document.getElementById("themeIcon");
+
+  function applyTheme(isDark) {
+    if (isDark) {
+      document.body.setAttribute("data-theme", "dark");
+      if (themeToggleText) themeToggleText.textContent = "Bright Mode";
+      if (themeIcon) {
+        themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
+      }
+    } else {
+      document.body.removeAttribute("data-theme");
+      if (themeToggleText) themeToggleText.textContent = "Dark PACS";
+      if (themeIcon) {
+        themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+      }
+    }
+  }
+
+  if (btnThemeToggle) {
+    btnThemeToggle.addEventListener("click", () => {
+      const isCurrentlyDark = document.body.getAttribute("data-theme") === "dark";
+      const newDark = !isCurrentlyDark;
+      applyTheme(newDark);
+      localStorage.setItem("fedlivernet-theme", newDark ? "dark" : "light");
+    });
+    const saved = localStorage.getItem("fedlivernet-theme");
+    if (saved === "dark") {
+      applyTheme(true);
+    } else {
+      applyTheme(false);
+    }
+  }
+
   // Initial Load
   loadSamplePrediction(state.currentSampleId);
   refreshQueueStatus();

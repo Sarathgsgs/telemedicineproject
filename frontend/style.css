@@ -1,37 +1,38 @@
 /* 
   FedLiverNet Telemedicine Platform - Master Design System
-  Theme: Clinical Dark Mode / Glassmorphism / Vibrant Accents
+  Theme: Clinical Medical Bright Mode (Hospital / Tele-Radiology Workstation)
+  Palette: Sterile Medical White, Hospital Sky/Teal, Clinical Emerald, Alert Crimson
   Fonts: Outfit (Headings), Inter (UI/Body), JetBrains Mono (Data/Metrics)
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Palette */
-  --bg-darkest: #070B14;
-  --bg-primary: #0C1222;
-  --bg-card: rgba(18, 26, 46, 0.75);
-  --bg-card-hover: rgba(25, 36, 64, 0.85);
-  --bg-card-elevated: #19233C;
+  /* Medical Bright Mode Palette (Default) */
+  --bg-darkest: #F1F5F9;
+  --bg-primary: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-card-elevated: #F8FAFC;
   
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(6, 182, 212, 0.4);
-  --border-focus: #06B6D4;
+  --border-subtle: #E2E8F0;
+  --border-highlight: rgba(2, 132, 199, 0.4);
+  --border-focus: #0284C7;
 
-  --text-main: #F8FAFC;
-  --text-sub: #94A3B8;
+  --text-main: #0F172A;
+  --text-sub: #475569;
   --text-muted: #64748B;
   
   /* Clinical Status Accents */
-  --accent-cyan: #06B6D4;
-  --accent-cyan-glow: rgba(6, 182, 212, 0.25);
-  --accent-emerald: #10B981;
-  --accent-emerald-glow: rgba(16, 185, 129, 0.25);
-  --accent-crimson: #EF4444;
-  --accent-crimson-glow: rgba(239, 68, 68, 0.35);
-  --accent-amber: #F59E0B;
-  --accent-amber-glow: rgba(245, 158, 11, 0.25);
-  --accent-purple: #8B5CF6;
+  --accent-cyan: #0284C7;
+  --accent-cyan-glow: rgba(2, 132, 199, 0.18);
+  --accent-emerald: #059669;
+  --accent-emerald-glow: rgba(5, 150, 105, 0.18);
+  --accent-crimson: #DC2626;
+  --accent-crimson-glow: rgba(220, 38, 38, 0.2);
+  --accent-amber: #D97706;
+  --accent-amber-glow: rgba(217, 119, 6, 0.18);
+  --accent-purple: #7C3AED;
 
   /* Typography */
   --font-heading: 'Outfit', sans-serif;
@@ -39,9 +40,26 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Shadows */
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 0 1px 1px var(--border-subtle);
+  --shadow-card-hover: 0 10px 25px -3px rgba(15, 23, 42, 0.1), 0 0 1px 1px var(--border-highlight);
+  --shadow-glow-cyan: 0 0 15px var(--accent-cyan-glow);
+  --shadow-glow-crimson: 0 0 15px var(--accent-crimson-glow);
+}
+
+/* Optional Dark PACS Theme Support */
+[data-theme="dark"] {
+  --bg-darkest: #070B14;
+  --bg-primary: #0C1222;
+  --bg-card: rgba(18, 26, 46, 0.75);
+  --bg-card-hover: rgba(25, 36, 64, 0.85);
+  --bg-card-elevated: #19233C;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(6, 182, 212, 0.4);
+  --border-focus: #06B6D4;
+  --text-main: #F8FAFC;
+  --text-sub: #94A3B8;
+  --text-muted: #64748B;
   --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 1px 1px var(--border-subtle);
-  --shadow-glow-cyan: 0 0 20px var(--accent-cyan-glow);
-  --shadow-glow-crimson: 0 0 25px var(--accent-crimson-glow);
 }
 
 * {
@@ -53,8 +71,8 @@
 body {
   background-color: var(--bg-darkest);
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 40%);
+    radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(13, 148, 136, 0.03) 0%, transparent 40%);
   background-attachment: fixed;
   color: var(--text-main);
   font-family: var(--font-body);
@@ -62,13 +80,14 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* -------------------------------------------------------------
-   Header Navigation Bar
+   Header Navigation Bar (Hospital Workstation Style)
 ------------------------------------------------------------- */
 .header-bar {
-  background: rgba(12, 18, 34, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
@@ -79,6 +98,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="dark"] .header-bar {
+  background: rgba(12, 18, 34, 0.85);
 }
 
 .header-brand {
@@ -88,14 +112,14 @@ body {
 }
 
 .brand-icon {
-  width: 38px;
-  height: 38px;
-  background: linear-gradient(135deg, #06B6D4, #3B82F6);
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0284C7, #0D9488);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 15px var(--accent-cyan-glow);
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.25);
 }
 
 .brand-icon svg {
@@ -109,21 +133,23 @@ body {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(to right, #FFFFFF, #E2E8F0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #0F172A;
+}
+
+[data-theme="dark"] .brand-titles h1 {
+  color: #F8FAFC;
 }
 
 .brand-titles p {
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   color: var(--text-sub);
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1.1rem;
 }
 
 .status-badge {
@@ -135,16 +161,16 @@ body {
   font-size: 0.78rem;
   font-weight: 600;
   font-family: var(--font-mono);
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34D399;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  color: #065F46;
   transition: all 0.3s ease;
 }
 
 .status-badge.offline {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #F87171;
+  background: #FEF2F2;
+  border-color: #FECACA;
+  color: #991B1B;
 }
 
 .pulse-dot {
@@ -152,7 +178,7 @@ body {
   height: 8px;
   border-radius: 50%;
   background-color: currentColor;
-  box-shadow: 0 0 8px currentColor;
+  box-shadow: 0 0 6px currentColor;
   animation: pulse 2s infinite;
 }
 
@@ -164,10 +190,14 @@ body {
 
 .nav-tabs {
   display: flex;
-  background: rgba(255, 255, 255, 0.04);
+  background: #F1F5F9;
   padding: 3px;
   border-radius: 10px;
   border: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .nav-tabs {
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .nav-tab-btn {
@@ -184,16 +214,22 @@ body {
 }
 
 .nav-tab-btn.active {
+  background: #FFFFFF;
+  color: #0F172A;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  border: 1px solid #E2E8F0;
+}
+
+[data-theme="dark"] .nav-tab-btn.active {
   background: var(--bg-card-elevated);
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn-toggle-offline {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(185, 28, 28, 0.3));
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #FECACA;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  color: #991B1B;
   padding: 0.45rem 0.95rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -206,14 +242,33 @@ body {
 }
 
 .btn-toggle-offline:hover {
-  background: rgba(239, 68, 68, 0.3);
+  background: #FEE2E2;
   border-color: #EF4444;
 }
 
 .btn-toggle-offline.online-mode {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(4, 120, 87, 0.3));
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #A7F3D0;
+  background: #ECFDF5;
+  border-color: #6EE7B7;
+  color: #065F46;
+}
+
+.btn-theme-toggle {
+  background: #F1F5F9;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.btn-theme-toggle:hover {
+  background: #E2E8F0;
 }
 
 /* -------------------------------------------------------------
@@ -256,21 +311,20 @@ body {
   }
 }
 
-/* Glass Card */
+/* Glass / Clinical Card */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 1.4rem;
   box-shadow: var(--shadow-card);
   margin-bottom: 1.25rem;
-  transition: border-color 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-highlight);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .card-title-row {
@@ -282,12 +336,12 @@ body {
 
 .card-title-row h2 {
   font-family: var(--font-heading);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .card-title-row h2 svg {
@@ -311,7 +365,7 @@ body {
 }
 
 .case-card {
-  background: var(--bg-card-elevated);
+  background: #F8FAFC;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 0.85rem;
@@ -323,14 +377,14 @@ body {
 
 .case-card:hover {
   transform: translateY(-2px);
-  border-color: var(--border-highlight);
-  background: rgba(30, 42, 68, 0.9);
+  border-color: var(--accent-cyan);
+  background: #F1F5F9;
 }
 
 .case-card.active {
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 16px var(--accent-cyan-glow);
-  background: rgba(14, 165, 233, 0.12);
+  box-shadow: 0 0 12px var(--accent-cyan-glow);
+  background: #F0F9FF;
 }
 
 .case-card .case-tag {
@@ -345,24 +399,24 @@ body {
 }
 
 .case-tag.tumor {
-  background: rgba(239, 68, 68, 0.2);
-  color: #FCA5A5;
+  background: #FEE2E2;
+  color: #B91C1C;
 }
 
 .case-tag.macro {
-  background: rgba(245, 158, 11, 0.2);
-  color: #FDE68A;
+  background: #FEF3C7;
+  color: #B45309;
 }
 
 .case-tag.healthy {
-  background: rgba(16, 185, 129, 0.2);
-  color: #A7F3D0;
+  background: #D1FAE5;
+  color: #047857;
 }
 
 .case-card h3 {
   font-size: 0.85rem;
-  font-weight: 600;
-  color: #FFFFFF;
+  font-weight: 700;
+  color: var(--text-main);
   margin-bottom: 0.25rem;
   line-height: 1.3;
 }
@@ -374,29 +428,30 @@ body {
 
 /* Upload zone */
 .upload-dropzone {
-  border: 1.5px dashed rgba(255, 255, 255, 0.15);
+  border: 1.5px dashed #CBD5E1;
   border-radius: 10px;
   padding: 0.75rem 1rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.02);
+  background: #F8FAFC;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-sub);
+  font-weight: 500;
 }
 
 .upload-dropzone:hover {
   border-color: var(--accent-cyan);
   color: var(--accent-cyan);
-  background: rgba(6, 182, 212, 0.04);
+  background: #F0F9FF;
 }
 
 /* -------------------------------------------------------------
-   Interactive CT Slice Canvas Viewer
+   Interactive CT Slice Canvas Viewer (Radiology PACS Housing)
 ------------------------------------------------------------- */
 .viewer-container {
   display: flex;
@@ -405,6 +460,7 @@ body {
   gap: 1rem;
 }
 
+/* Medical Monitor Housing (Deep Black for True Radiology Contrast) */
 .canvas-viewport {
   position: relative;
   width: 384px;
@@ -412,8 +468,8 @@ body {
   background: #000000;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  border: 2px solid #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .canvas-viewport canvas {
@@ -441,14 +497,15 @@ body {
 }
 
 .overlay-badge {
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(4px);
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 3px 8px;
+  border-radius: 5px;
   font-size: 0.7rem;
   font-family: var(--font-mono);
-  color: #E2E8F0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-weight: 600;
 }
 
 .viewport-crosshair {
@@ -457,11 +514,12 @@ body {
   right: 8px;
   font-size: 0.7rem;
   font-family: var(--font-mono);
-  background: rgba(0, 0, 0, 0.7);
-  padding: 2px 6px;
-  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.75);
+  padding: 3px 8px;
+  border-radius: 5px;
   color: #94A3B8;
   pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Viewer Controls Bar */
@@ -470,8 +528,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  background: var(--bg-card-elevated);
-  padding: 1rem;
+  background: #F8FAFC;
+  padding: 1.1rem;
   border-radius: 12px;
   border: 1px solid var(--border-subtle);
 }
@@ -484,10 +542,10 @@ body {
 }
 
 .control-slider-group label {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-sub);
-  font-weight: 500;
-  min-width: 120px;
+  font-weight: 600;
+  min-width: 140px;
 }
 
 .custom-range {
@@ -498,8 +556,9 @@ body {
 
 .slider-val {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: #FFFFFF;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
   min-width: 45px;
   text-align: right;
 }
@@ -513,36 +572,42 @@ body {
 }
 
 .btn-pill-toggle {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-subtle);
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
   color: var(--text-sub);
-  padding: 0.4rem 0.8rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 8px;
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
   gap: 0.45rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.btn-pill-toggle:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
 }
 
 .btn-pill-toggle.active {
-  background: rgba(6, 182, 212, 0.18);
+  background: #F0F9FF;
   border-color: var(--accent-cyan);
-  color: #FFFFFF;
+  color: var(--accent-cyan);
 }
 
 .btn-pill-toggle.liver-active {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: var(--accent-emerald);
-  color: #34D399;
+  background: #ECFDF5;
+  border-color: #059669;
+  color: #065F46;
 }
 
 .btn-pill-toggle.tumor-active {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: var(--accent-crimson);
-  color: #F87171;
+  background: #FEF2F2;
+  border-color: #DC2626;
+  color: #991B1B;
 }
 
 /* Legend */
@@ -553,12 +618,14 @@ body {
   gap: 1.5rem;
   font-size: 0.78rem;
   padding-top: 0.3rem;
+  font-weight: 500;
+  color: var(--text-sub);
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .legend-color {
@@ -567,15 +634,15 @@ body {
   border-radius: 3px;
 }
 
-.legend-color.liver { background-color: #10B981; }
-.legend-color.tumor { background-color: #EF4444; }
-.legend-color.gt { border: 1.5px dashed #F59E0B; background-color: rgba(245, 158, 11, 0.3); }
+.legend-color.liver { background-color: #059669; }
+.legend-color.tumor { background-color: #DC2626; }
+.legend-color.gt { border: 1.5px dashed #D97706; background-color: rgba(217, 119, 6, 0.2); }
 
 /* -------------------------------------------------------------
    Right Panel: Diagnostic Verdict & Quantitative Metrics
 ------------------------------------------------------------- */
 .verdict-banner {
-  padding: 1.1rem;
+  padding: 1.15rem;
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -586,14 +653,15 @@ body {
 }
 
 .verdict-banner.critical {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(153, 27, 27, 0.25));
-  border-color: rgba(239, 68, 68, 0.4);
-  box-shadow: var(--shadow-glow-crimson);
+  background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
+  border-color: #FCA5A5;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.08);
 }
 
 .verdict-banner.normal {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(6, 95, 70, 0.25));
-  border-color: rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+  border-color: #6EE7B7;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
 }
 
 .verdict-icon {
@@ -607,27 +675,32 @@ body {
 }
 
 .verdict-banner.critical .verdict-icon {
-  background: rgba(239, 68, 68, 0.3);
-  color: #EF4444;
+  background: #FEE2E2;
+  color: #DC2626;
 }
 
 .verdict-banner.normal .verdict-icon {
-  background: rgba(16, 185, 129, 0.3);
-  color: #10B981;
+  background: #D1FAE5;
+  color: #059669;
 }
 
 .verdict-text h3 {
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 700;
-  color: #FFFFFF;
 }
+
+.verdict-banner.critical .verdict-text h3 { color: #991B1B; }
+.verdict-banner.normal .verdict-text h3 { color: #065F46; }
 
 .verdict-text p {
   font-size: 0.8rem;
-  color: var(--text-sub);
   margin-top: 2px;
+  font-weight: 500;
 }
+
+.verdict-banner.critical .verdict-text p { color: #B91C1C; }
+.verdict-banner.normal .verdict-text p { color: #047857; }
 
 /* Metrics Grid */
 .metrics-grid-4 {
@@ -638,17 +711,18 @@ body {
 }
 
 .metric-box {
-  background: var(--bg-card-elevated);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 0.95rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
 }
 
 .metric-label {
   font-size: 0.74rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-sub);
   margin-bottom: 0.35rem;
   display: flex;
@@ -660,7 +734,7 @@ body {
   font-family: var(--font-mono);
   font-size: 1.45rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--text-main);
   line-height: 1.1;
 }
 
@@ -671,25 +745,27 @@ body {
 }
 
 .metric-box.tumor-highlight {
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: #FECACA;
+  background: #FFF5F5;
 }
 
 .metric-box.tumor-highlight .metric-value {
-  color: #F87171;
+  color: #DC2626;
 }
 
 .metric-box.speed-highlight {
-  border-color: rgba(6, 182, 212, 0.3);
+  border-color: #BAE6FD;
+  background: #F0F9FF;
 }
 
 .metric-box.speed-highlight .metric-value {
-  color: #38BDF8;
+  color: #0284C7;
 }
 
 /* Offline Queue Management Widget */
 .offline-sync-widget {
-  background: linear-gradient(180deg, rgba(25, 35, 60, 0.7), rgba(18, 26, 46, 0.9));
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, #F0F9FF, #F8FAFC);
+  border: 1px solid #BAE6FD;
   border-radius: 14px;
   padding: 1.15rem;
 }
@@ -699,8 +775,8 @@ body {
   align-items: center;
   justify-content: space-around;
   padding: 0.85rem 0;
-  border-top: 1px solid var(--border-subtle);
-  border-bottom: 1px solid var(--border-subtle);
+  border-top: 1px solid #E0F2FE;
+  border-bottom: 1px solid #E0F2FE;
   margin: 0.85rem 0;
 }
 
@@ -712,12 +788,13 @@ body {
   font-family: var(--font-mono);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: #0F172A;
 }
 
 .queue-stat-label {
   font-size: 0.72rem;
   color: var(--text-sub);
+  font-weight: 600;
   margin-top: 2px;
 }
 
@@ -728,9 +805,9 @@ body {
 
 .btn-secondary {
   flex: 1;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border-subtle);
-  color: #E2E8F0;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   font-size: 0.82rem;
@@ -738,16 +815,18 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-heading);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
+  background: #F8FAFC;
+  border-color: #94A3B8;
+  color: #0F172A;
 }
 
 .btn-primary-sync {
   flex: 1;
-  background: linear-gradient(135deg, #06B6D4, #3B82F6);
+  background: linear-gradient(135deg, #0284C7, #0D9488);
   border: none;
   color: #FFFFFF;
   padding: 0.6rem 0.8rem;
@@ -755,14 +834,14 @@ body {
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 10px var(--accent-cyan-glow);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
   transition: all 0.2s ease;
   font-family: var(--font-heading);
 }
 
 .btn-primary-sync:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
 }
 
 .btn-primary-sync:disabled {
@@ -778,11 +857,11 @@ body {
 
 .feedback-textarea {
   width: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-subtle);
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
   border-radius: 8px;
   padding: 0.65rem 0.85rem;
-  color: #FFFFFF;
+  color: #0F172A;
   font-family: var(--font-body);
   font-size: 0.82rem;
   resize: vertical;
@@ -797,12 +876,12 @@ body {
 
 /* Regulatory Disclaimer */
 .regulatory-disclaimer {
-  background: rgba(245, 158, 11, 0.08);
-  border-left: 3px solid var(--accent-amber);
+  background: #FFFBEB;
+  border-left: 3px solid #D97706;
   padding: 0.75rem 1rem;
   border-radius: 0 8px 8px 0;
   font-size: 0.75rem;
-  color: #FDE68A;
+  color: #92400E;
   margin-top: 1.25rem;
   line-height: 1.45;
 }
@@ -823,7 +902,7 @@ body {
 }
 
 .hospital-node-card {
-  background: var(--bg-card-elevated);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 1.1rem;
@@ -832,17 +911,18 @@ body {
   align-items: center;
   justify-content: space-between;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
 }
 
 .hospital-node-card:hover {
   border-color: var(--border-highlight);
-  background: rgba(30, 42, 68, 0.95);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .hospital-info h4 {
   font-size: 0.92rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .hospital-info p {
@@ -856,19 +936,19 @@ body {
   border-radius: 9999px;
   font-size: 0.74rem;
   font-family: var(--font-mono);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .cluster-1 {
-  background: rgba(139, 92, 246, 0.2);
-  color: #C4B5FD;
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: #F3E8FF;
+  color: #6B21A8;
+  border: 1px solid #D8B4FE;
 }
 
 .cluster-2 {
-  background: rgba(6, 182, 212, 0.2);
-  color: #67E8F9;
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  background: #E0F2FE;
+  color: #0369A1;
+  border: 1px solid #BAE6FD;
 }
 
 /* Benchmark Comparison Table */
@@ -886,34 +966,35 @@ body {
 .benchmark-table th {
   text-align: left;
   padding: 0.65rem 0.85rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: #F1F5F9;
   color: var(--text-sub);
-  font-weight: 600;
+  font-weight: 700;
   border-bottom: 1px solid var(--border-subtle);
 }
 
 .benchmark-table td {
   padding: 0.65rem 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: #E2E8F0;
+  border-bottom: 1px solid #F1F5F9;
+  color: var(--text-main);
 }
 
 .benchmark-table tr.highlight-row {
-  background: rgba(6, 182, 212, 0.08);
+  background: #F0F9FF;
   font-weight: 600;
 }
 
 .benchmark-table tr.highlight-row td {
-  color: #38BDF8;
+  color: #0284C7;
 }
 
 /* Privacy & Sparsification Interactive Controls */
 .interactive-slider-box {
-  background: var(--bg-card-elevated);
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 1.15rem;
   margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
 }
 
 .slider-header {
@@ -926,7 +1007,7 @@ body {
 .slider-header h4 {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .slider-val-badge {
@@ -934,20 +1015,22 @@ body {
   font-size: 0.82rem;
   padding: 2px 8px;
   border-radius: 6px;
-  background: rgba(6, 182, 212, 0.15);
-  color: #38BDF8;
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  background: #F0F9FF;
+  color: #0284C7;
+  border: 1px solid #BAE6FD;
+  font-weight: 600;
 }
 
 .formula-display {
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  background: rgba(0, 0, 0, 0.35);
+  background: #F5F3FF;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  color: #A5B4FC;
+  color: #5B21B6;
   margin-top: 0.65rem;
-  border-left: 2px solid var(--accent-purple);
+  border-left: 3px solid #7C3AED;
+  font-weight: 600;
 }
 
 /* -------------------------------------------------------------
@@ -964,18 +1047,17 @@ body {
 }
 
 .toast {
-  background: rgba(18, 26, 46, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-highlight);
+  background: #0F172A;
   color: #FFFFFF;
   padding: 0.85rem 1.25rem;
   border-radius: 10px;
   font-size: 0.85rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
   display: flex;
   align-items: center;
   gap: 0.75rem;
   animation: slideIn 0.3s ease-out;
+  border-left: 4px solid var(--accent-cyan);
 }
 
 @keyframes slideIn {
