@@ -43,6 +43,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def add_no_cache_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+
 # Initialize Engine and Offline Sync Manager
 MODEL_PATH = "checkpoints/edge_model_traced.pt"
 if not os.path.exists(MODEL_PATH):
@@ -57,8 +67,14 @@ MANIFEST_PATH = os.path.join(SLICES_DIR, "cohort_master_manifest.json")
 
 
 def array_to_base64_png(array_2d: np.ndarray) -> str:
-    """Converts a normalized 2D numpy array [0, 1] to a grayscale base64 PNG data URI."""
-    uint8_img = (np.clip(array_2d, 0.0, 1.0) * 255.0).astype(np.uint8)
+    """Converts a normalized 2D numpy array [0, 1] to a grayscale base64 PNG data URI with optimal clinical contrast."""
+    arr = np.clip(array_2d, 0.0, 1.0)
+    min_val, max_val = float(arr.min()), float(arr.max())
+    if max_val > min_val + 1e-5:
+        stretched = (arr - min_val) / (max_val - min_val)
+    else:
+        stretched = arr
+    uint8_img = (stretched * 255.0).astype(np.uint8)
     pil_img = Image.fromarray(uint8_img, mode="L")
     buf = io.BytesIO()
     pil_img.save(buf, format="PNG")

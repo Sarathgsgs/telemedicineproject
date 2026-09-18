@@ -152,23 +152,70 @@ function setupNavigation() {
 }
 
 // -------------------------------------------------------------
+// Reliable Base64 Data URI Image Loader
+// -------------------------------------------------------------
+function loadDataImage(src) {
+  return new Promise((resolve) => {
+    if (!src) {
+      resolve(null);
+      return;
+    }
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = (e) => {
+      console.warn("Failed to load image from src", e);
+      resolve(null);
+    };
+    img.src = src;
+    // Chromium immediate cache/synchronous completion check
+    if (img.complete && img.naturalWidth !== 0) {
+      resolve(img);
+    }
+  });
+}
+
+// -------------------------------------------------------------
 // Canvas Drawing & Overlay Rendering
 // -------------------------------------------------------------
 function renderCanvases() {
-  // Clear canvases
-  ctCtx.clearRect(0, 0, 128, 128);
-  maskCtx.clearRect(0, 0, 128, 128);
+  if (!elements.ctCanvas || !elements.maskCanvas) return;
+  const ctx1 = elements.ctCanvas.getContext("2d");
+  const ctx2 = elements.maskCanvas.getContext("2d");
+
+  const w = 128;
+  const h = 128;
+
+  ctx1.clearRect(0, 0, w, h);
+  ctx2.clearRect(0, 0, w, h);
 
   // 1. Draw raw CT slice
   if (state.rawImage) {
-    ctCtx.drawImage(state.rawImage, 0, 0, 128, 128);
+    ctx1.drawImage(state.rawImage, 0, 0, w, h);
   }
 
   // 2. Draw mask overlay (either predicted or ground-truth)
   const maskImg = state.showGt ? state.gtMaskImage : state.predMaskImage;
   if (maskImg) {
-    maskCtx.globalAlpha = state.maskOpacity;
-    maskCtx.drawImage(maskImg, 0, 0, 128, 128);
+    ctx2.globalAlpha = state.maskOpacity;
+    if (state.showLiver && state.showTumor) {
+      ctx2.drawImage(maskImg, 0, 0, w, h);
+    } else {
+      const off = document.createElement("canvas");
+      off.width = w;
+      off.height = h;
+      const offCtx = off.getContext("2d");
+      offCtx.drawImage(maskImg, 0, 0, w, h);
+      const imgData = offCtx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const isTumor = (d[i] > 150 && d[i+1] < 120);
+        const isLiver = (d[i+1] > 140 && d[i] < 80);
+        if (!state.showTumor && isTumor) d[i+3] = 0;
+        if (!state.showLiver && isLiver) d[i+3] = 0;
+      }
+      offCtx.putImageData(imgData, 0, 0);
+      ctx2.drawImage(off, 0, 0, w, h);
+    }
   }
 }
 
@@ -202,29 +249,18 @@ async function loadSamplePrediction(sampleId) {
     const data = await res.json();
     state.currentPrediction = data;
 
-    // Load CT Image
-    const rawImg = new Image();
-    rawImg.onload = () => {
-      state.rawImage = rawImg;
-      renderCanvases();
-    };
-    rawImg.src = data.raw_slice_b64;
+    // Load all images reliably using Promise.all with instant complete check
+    const [rawImg, predImg, gtImg] = await Promise.all([
+      loadDataImage(data.raw_slice_b64),
+      loadDataImage(data.colored_mask_b64),
+      loadDataImage(data.gt_mask_b64)
+    ]);
 
-    // Load Predicted Mask Image
-    const predImg = new Image();
-    predImg.onload = () => {
-      state.predMaskImage = predImg;
-      renderCanvases();
-    };
-    predImg.src = data.colored_mask_b64;
+    state.rawImage = rawImg;
+    state.predMaskImage = predImg;
+    state.gtMaskImage = gtImg;
 
-    // Load Ground Truth Mask Image
-    const gtImg = new Image();
-    gtImg.onload = () => {
-      state.gtMaskImage = gtImg;
-      renderCanvases();
-    };
-    gtImg.src = data.gt_mask_b64;
+    renderCanvases();
 
     // Update UI Metrics
     updateMetricsDisplay(data);
@@ -390,14 +426,15 @@ function setupUploadHandlers() {
       const data = await res.json();
       state.currentPrediction = data;
 
-      const rawImg = new Image();
-      rawImg.onload = () => { state.rawImage = rawImg; renderCanvases(); };
-      rawImg.src = data.raw_slice_b64;
+      const [rawImg, predImg] = await Promise.all([
+        loadDataImage(data.raw_slice_b64),
+        loadDataImage(data.colored_mask_b64)
+      ]);
+      state.rawImage = rawImg;
+      state.predMaskImage = predImg;
+      state.gtMaskImage = null;
 
-      const predImg = new Image();
-      predImg.onload = () => { state.predMaskImage = predImg; renderCanvases(); };
-      predImg.src = data.colored_mask_b64;
-
+      renderCanvases();
       updateMetricsDisplay(data);
       showToast("Custom CT slice analyzed successfully!", "info");
       refreshQueueStatus();
@@ -525,6 +562,24 @@ function initializeApp() {
     elements.lblOverlayMode.textContent = state.showGt ? "GROUND TRUTH OVERLAY" : "PREDICTED OVERLAY";
     renderCanvases();
   });
+
+  // Liver Parenchyma Channel Toggle
+  if (elements.btnToggleLiver) {
+    elements.btnToggleLiver.addEventListener("click", () => {
+      state.showLiver = !state.showLiver;
+      elements.btnToggleLiver.classList.toggle("liver-active", state.showLiver);
+      renderCanvases();
+    });
+  }
+
+  // Focal Tumor Channel Toggle
+  if (elements.btnToggleTumor) {
+    elements.btnToggleTumor.addEventListener("click", () => {
+      state.showTumor = !state.showTumor;
+      elements.btnToggleTumor.classList.toggle("tumor-active", state.showTumor);
+      renderCanvases();
+    });
+  }
 
   // Re-run inference button
   elements.btnRunInference.addEventListener("click", () => {
