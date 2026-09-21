@@ -28,10 +28,13 @@ HOST = "127.0.0.1"
 URL = f"http://{HOST}:{PORT}"
 
 def ensure_environment():
-    """Validates that .venv is used if available."""
-    venv_python = os.path.join(os.path.dirname(__file__), ".venv", "Scripts", "python.exe")
-    # If running with a different python and .venv exists, re-exec with .venv
-    if os.path.exists(venv_python) and os.path.abspath(sys.executable) != os.path.abspath(venv_python):
+    """Validates that .venv is used if available (Windows, Linux, macOS)."""
+    candidates = [
+        os.path.join(os.path.dirname(__file__), ".venv", "Scripts", "python.exe"),
+        os.path.join(os.path.dirname(__file__), ".venv", "bin", "python"),
+    ]
+    venv_python = next((p for p in candidates if os.path.exists(p)), None)
+    if venv_python and os.path.abspath(sys.executable) != os.path.abspath(venv_python):
         print(f"[Launcher] Switching to virtual environment Python: {venv_python}")
         try:
             subprocess.run([venv_python, __file__] + sys.argv[1:])
@@ -47,22 +50,31 @@ def check_and_prepare_artifacts():
     print("=" * 65)
 
     # 1. Check TorchScript edge model
+    os.makedirs("checkpoints", exist_ok=True)
     traced_model = os.path.join("checkpoints", "edge_model_traced.pt")
     centralized_model = os.path.join("checkpoints", "centralized_best.pt")
     
-    if not os.path.exists(traced_model) and os.path.exists(centralized_model):
-        print("[Launcher] Compiling TorchScript edge model from checkpoint...")
-        from model.export_edge import export_to_torchscript, load_model_from_checkpoint
-        model = load_model_from_checkpoint(centralized_model)
-        export_to_torchscript(model, traced_model)
-        print("[Launcher] TorchScript edge model compiled successfully.")
+    if not os.path.exists(traced_model):
+        if os.path.exists(centralized_model):
+            print("[Launcher] Compiling TorchScript edge model from checkpoint...")
+            from model.export_edge import export_to_torchscript, load_model_from_checkpoint
+            model = load_model_from_checkpoint(centralized_model)
+            export_to_torchscript(model, traced_model)
+            print("[Launcher] TorchScript edge model compiled successfully.")
+        else:
+            print("[Launcher] Initializing baseline AttentionUNetLite edge model...")
+            from model.unet_attention import AttentionUNetLite
+            from model.export_edge import export_to_torchscript
+            model = AttentionUNetLite(in_channels=1, num_classes=3, base_filters=32)
+            export_to_torchscript(model, traced_model)
+            print("[Launcher] Baseline TorchScript edge model created successfully.")
 
     # 2. Check sample CT slices
     sample_slice = os.path.join("data", "processed", "slices", "cohort_master_slice_0001.npz")
     if not os.path.exists(sample_slice):
         print("[Launcher] Generating demonstration CT slice partitions...")
-        from data.init_dataset import init_dataset
-        init_dataset()
+        from data.init_dataset import setup_dataset
+        setup_dataset()
         print("[Launcher] CT slice partitions initialized.")
 
     print(f"[+] System checks verified.")

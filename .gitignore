@@ -31,12 +31,12 @@ data/processed/
 *.npy
 *.npz
 
-# Model weights & checkpoints
-*.pt
+# Model weights & checkpoints (track pre-compiled edge model, ignore raw checkpoints)
+checkpoints/*
+!checkpoints/edge_model_traced.pt
 *.pth
 *.onnx
 *.tflite
-checkpoints/
 
 # Node / Frontend
 node_modules/

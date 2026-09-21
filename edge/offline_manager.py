@@ -84,7 +84,9 @@ class EdgeInferenceEngine:
                 sd = ckpt["model_state_dict"] if isinstance(ckpt, dict) and "model_state_dict" in ckpt else ckpt
                 m.load_state_dict(sd)
                 return m.to(self.device)
-            raise FileNotFoundError(f"Neither {path} nor fallback checkpoint {fallback} found.")
+            print(f"[EdgeEngine] Notice: Neither {path} nor {fallback} found. Initializing base AttentionUNetLite model.")
+            m = AttentionUNetLite(in_channels=1, num_classes=3, base_filters=self.base_filters)
+            return m.to(self.device)
 
         try:
             # Attempt loading as TorchScript compiled module

@@ -141,5 +141,9 @@ def generate_sanity_plot(sample_records, output_path: str):
     plt.close()
 
 
+# Alias for launcher compatibility
+init_dataset = setup_dataset
+
+
 if __name__ == "__main__":
     setup_dataset()
