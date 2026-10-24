@@ -9,6 +9,12 @@ Orchestration script for Phase 2 data pipeline.
 """
 
 import os
+import sys
+
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
 import json
 import matplotlib
 matplotlib.use("Agg")
@@ -16,20 +22,59 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
+import argparse
+from typing import Optional, List, Dict, Any, Tuple
 from data.synthetic_generator import generate_synthetic_cohort, create_synthetic_ct_slice
 from data.non_iid_splitter import partition_slices_non_iid, partition_slices_iid, summarize_partition
 from data.dataset import LiverSliceDataset, get_dataloader
+from data.patient_splitter import partition_by_patient, save_patient_partitions
 
 
 def setup_dataset(
     data_root: str = "data/processed",
     total_samples: int = 150,
-    num_clients: int = 3
+    num_clients: int = 3,
+    mode: str = "synthetic",
+    raw_lits_dir: str = "data/dataset",
+    max_volumes: Optional[int] = None
 ):
     print("=" * 65)
-    print("PHASE 2: DATA PIPELINE INITIALIZATION & NON-IID PARTITIONING")
+    print(f"DATA PIPELINE INITIALIZATION & PARTITIONING (Mode: {mode.upper()})")
     print("=" * 65)
 
+    if mode == "real_lits":
+        from data.lits_downloader import check_local_lits_files, ingest_and_extract_lits
+        pairs = check_local_lits_files(raw_lits_dir)
+        if not pairs:
+            print(f"[-] No matched LiTS NIfTI pairs found in {raw_lits_dir}.")
+            from data.lits_downloader import print_download_instructions
+            print_download_instructions()
+            return None, None
+
+        real_cohort_dir = os.path.join(data_root, "real_lits", "slices")
+        records = ingest_and_extract_lits(
+            raw_dir=raw_lits_dir,
+            output_dir=real_cohort_dir,
+            max_volumes=max_volumes
+        )
+        
+        # Patient-Level Partitioning (Eliminates Data Leakage)
+        print("\n[*] Enforcing strict patient-level partition across train, val, and test...")
+        partition_data = partition_by_patient(records, num_clients=num_clients)
+        
+        manifest_file = os.path.join(data_root, "real_lits", "client_partitions_patient_level.json")
+        save_patient_partitions(partition_data, manifest_file)
+        print(f"[+] Real LiTS patient-level manifest saved: {manifest_file}")
+
+        # Render sanity check plot for real LiTS slices
+        plot_path = os.path.join(data_root, "real_lits", "sanity_check_real_lits.png")
+        if len(records) >= 4:
+            generate_sanity_plot(records[:4], plot_path)
+            print(f"[+] Real CT visual verification plot saved to: {plot_path}")
+
+        return manifest_file, plot_path
+
+    # Default / Synthetic Mode
     os.makedirs(data_root, exist_ok=True)
     cohort_dir = os.path.join(data_root, "slices")
     os.makedirs(cohort_dir, exist_ok=True)
@@ -48,6 +93,7 @@ def setup_dataset(
     print(f"[*] Partitioning dataset across {num_clients} simulated hospital nodes with clinical skew...")
     non_iid_splits = partition_slices_non_iid(records, num_clients=num_clients)
     iid_splits = partition_slices_iid(records, num_clients=num_clients)
+
 
     non_iid_summary = summarize_partition(non_iid_splits)
     iid_summary = summarize_partition(iid_splits)
@@ -146,4 +192,24 @@ init_dataset = setup_dataset
 
 
 if __name__ == "__main__":
-    setup_dataset()
+    parser = argparse.ArgumentParser(description="FedLiverNet Data Pipeline Initializer")
+    default_mode = "real_lits" if os.path.exists("data/dataset") else "synthetic"
+    parser.add_argument("--mode", choices=["synthetic", "real_lits"], default=default_mode,
+                        help="Data mode: 'synthetic' or 'real_lits'")
+    parser.add_argument("--raw-dir", type=str, default="data/dataset",
+                        help="Directory containing real LiTS NIfTI files")
+    parser.add_argument("--max-volumes", type=int, default=10,
+                        help="Maximum patient volumes to extract for real LiTS")
+    parser.add_argument("--samples", type=int, default=150,
+                        help="Total synthetic samples (if mode=synthetic)")
+    parser.add_argument("--clients", type=int, default=3,
+                        help="Number of simulated hospital clients")
+    args = parser.parse_args()
+
+    setup_dataset(
+        total_samples=args.samples,
+        num_clients=args.clients,
+        mode=args.mode,
+        raw_lits_dir=args.raw_dir,
+        max_volumes=args.max_volumes
+    )

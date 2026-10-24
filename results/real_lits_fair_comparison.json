@@ -1,0 +1,29 @@
+{
+  "Centralized Baseline": {
+    "mean_dice": 0.741,
+    "liver_dice": 0.6447,
+    "tumor_dice": 0.8372,
+    "mean_hd95": 20.44,
+    "tumor_hd95": 16.28,
+    "inter_client_std": 0.0,
+    "description": "Pooled training reference upper bound"
+  },
+  "Standard FedAvg (Non-IID)": {
+    "mean_dice": 0.4173,
+    "liver_dice": 0.4102,
+    "tumor_dice": 0.4244,
+    "mean_hd95": 55.48,
+    "tumor_hd95": 57.56,
+    "inter_client_std": 0.0,
+    "description": "Standard unpersonalized collaborative averaging"
+  },
+  "FedAvg + CFL-Lite (Personalized)": {
+    "mean_dice": 0.6405,
+    "liver_dice": 0.5135,
+    "tumor_dice": 0.7674,
+    "mean_hd95": 50.3,
+    "tumor_hd95": 22.62,
+    "inter_client_std": 0.1023,
+    "description": "Clustered federated learning + 1 local fine-tuning epoch"
+  }
+}

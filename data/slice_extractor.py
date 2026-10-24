@@ -126,8 +126,11 @@ def extract_slices_from_nifti(
 
         record = {
             "file": filename,
+            "filename": filename,
             "path": filepath,
+            "filepath": filepath,
             "subject_id": subject_id,
+            "patient_id": subject_id,
             "slice_index": z,
             **meta
         }

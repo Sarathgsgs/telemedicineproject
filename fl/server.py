@@ -34,7 +34,8 @@ def aggregate_eval_metrics(metrics: List[Tuple[int, Dict[str, Scalar]]]) -> Dict
         "liver_dice", "tumor_dice", "mean_dice",
         "liver_iou", "tumor_iou",
         "liver_precision", "tumor_precision",
-        "liver_recall", "tumor_recall"
+        "liver_recall", "tumor_recall",
+        "mean_hd95", "liver_hd95", "tumor_hd95"
     ]
 
     aggregated = {}

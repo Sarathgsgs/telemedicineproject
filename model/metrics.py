@@ -48,15 +48,67 @@ def compute_binary_metrics(
     }
 
 
+from scipy.ndimage import binary_erosion, distance_transform_edt
+
+
+def compute_hd95(
+    pred: np.ndarray,
+    target: np.ndarray,
+    voxel_spacing: Tuple[float, float] = (1.0, 1.0),
+    max_penalty: float = 100.0
+) -> float:
+    """
+    Computes 95th percentile Hausdorff Distance (HD95) between binary masks in mm.
+    
+    Args:
+        pred: Binary prediction mask.
+        target: Binary ground-truth reference mask.
+        voxel_spacing: In-plane pixel spacing in millimeters (default: (1.0, 1.0)).
+        max_penalty: Penalty assigned when one mask is completely empty (default: 100.0 mm).
+        
+    Returns:
+        HD95 metric in millimeters (lower is better, 0.0 is perfect contour match).
+    """
+    pred_b = (pred > 0).astype(bool)
+    target_b = (target > 0).astype(bool)
+
+    if not np.any(pred_b) and not np.any(target_b):
+        return 0.0
+    if not np.any(pred_b) or not np.any(target_b):
+        return float(max_penalty)
+
+    # Extract 1-pixel contour boundaries using binary erosion
+    border_pred = pred_b ^ binary_erosion(pred_b)
+    border_target = target_b ^ binary_erosion(target_b)
+
+    if not np.any(border_pred) or not np.any(border_target):
+        return float(max_penalty)
+
+    # Compute Euclidean distance transforms
+    dt_target = distance_transform_edt(~border_target, sampling=voxel_spacing)
+    dt_pred = distance_transform_edt(~border_pred, sampling=voxel_spacing)
+
+    # Distance from prediction boundary to target boundary
+    dist_pred_to_target = dt_target[border_pred]
+    # Distance from target boundary to prediction boundary
+    dist_target_to_pred = dt_pred[border_target]
+
+    combined = np.concatenate([dist_pred_to_target, dist_target_to_pred])
+    hd95 = float(np.percentile(combined, 95))
+    return float(np.clip(hd95, 0.0, max_penalty))
+
+
 def evaluate_batch(
     logits: torch.Tensor,
-    targets: torch.Tensor
+    targets: torch.Tensor,
+    compute_contour_hd95: bool = False
 ) -> Dict[str, float]:
     """
     Evaluates multi-class segmentation for:
       - Liver (Class 1)
       - Tumor (Class 2)
       - Mean Average (Liver + Tumor)
+      - Optional HD95 contour boundary error
     """
     preds = torch.argmax(logits, dim=1).detach().cpu().numpy()
     targets_np = targets.detach().cpu().numpy()
@@ -64,6 +116,8 @@ def evaluate_batch(
     batch_size = preds.shape[0]
     liver_metrics = {"dice": [], "iou": [], "precision": [], "recall": []}
     tumor_metrics = {"dice": [], "iou": [], "precision": [], "recall": []}
+    hd95_liver = []
+    hd95_tumor = []
 
     for b in range(batch_size):
         p_b = preds[b]
@@ -77,6 +131,10 @@ def evaluate_batch(
         for k in liver_metrics:
             liver_metrics[k].append(m_liver[k])
             tumor_metrics[k].append(m_tumor[k])
+
+        if compute_contour_hd95:
+            hd95_liver.append(compute_hd95(p_b >= 1, t_b >= 1))
+            hd95_tumor.append(compute_hd95(p_b == 2, t_b == 2))
 
     results = {
         "liver_dice": float(np.mean(liver_metrics["dice"])),
@@ -94,4 +152,10 @@ def evaluate_batch(
     results["mean_dice"] = float((results["liver_dice"] + results["tumor_dice"]) / 2.0)
     results["mean_iou"] = float((results["liver_iou"] + results["tumor_iou"]) / 2.0)
 
+    if compute_contour_hd95:
+        results["liver_hd95"] = float(np.mean(hd95_liver))
+        results["tumor_hd95"] = float(np.mean(hd95_tumor))
+        results["mean_hd95"] = float((results["liver_hd95"] + results["tumor_hd95"]) / 2.0)
+
     return results
+

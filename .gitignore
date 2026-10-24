@@ -1,4 +1,6 @@
-# Python
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -23,40 +25,61 @@ wheels/
 .installed.cfg
 *.egg
 
-# Data & Datasets
+# ==========================================
+# Testing & IDEs
+# ==========================================
+.pytest_cache/
+.coverage
+htmlcov/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==========================================
+# Large Datasets & Archives (Excluded from Git)
+# ==========================================
+data/dataset/
 data/raw/
-data/processed/
 *.nii
 *.nii.gz
 *.npy
 *.npz
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
 
-# Model weights & checkpoints (track pre-compiled edge model, ignore raw checkpoints)
+# Retain patient partition manifest and sanity check images
+!data/processed/real_lits/client_partitions_patient_level.json
+!data/processed/real_lits/sanity_check_real_lits.png
+
+# Ignore processed slice binaries
+data/processed/slices/
+data/processed/real_lits/slices/
+
+# ==========================================
+# Model Checkpoints (Track Edge Model Only)
+# ==========================================
 checkpoints/*
 !checkpoints/edge_model_traced.pt
 *.pth
 *.onnx
 *.tflite
 
-# Node / Frontend
-node_modules/
-dist/
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# OS and IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.swp
+# ==========================================
+# Local Runtime Databases & Logs
+# ==========================================
 *.sqlite
 *.db
 *.db-wal
 *.db-shm
+*.log
 
+# ==========================================
+# OS Generated Files
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini

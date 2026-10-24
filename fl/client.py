@@ -118,12 +118,17 @@ class HospitalClient(fl.client.NumPyClient):
 
         total_loss = 0.0
         total_samples = len(self.test_records)
+        compute_hd95 = config.get("compute_hd95", False)
         metrics_accum = {
             "liver_dice": 0.0, "tumor_dice": 0.0, "mean_dice": 0.0,
             "liver_iou": 0.0, "tumor_iou": 0.0,
             "liver_precision": 0.0, "tumor_precision": 0.0,
             "liver_recall": 0.0, "tumor_recall": 0.0
         }
+        if compute_hd95:
+            metrics_accum["mean_hd95"] = 0.0
+            metrics_accum["liver_hd95"] = 0.0
+            metrics_accum["tumor_hd95"] = 0.0
 
         with torch.no_grad():
             for images, masks, _ in self.test_loader:
@@ -134,9 +139,10 @@ class HospitalClient(fl.client.NumPyClient):
                 loss, _ = self.criterion(logits, masks)
                 total_loss += loss.item() * images.size(0)
 
-                b_metrics = evaluate_batch(logits, masks)
+                b_metrics = evaluate_batch(logits, masks, compute_contour_hd95=compute_hd95)
                 for k in metrics_accum:
-                    metrics_accum[k] += b_metrics[k] * images.size(0)
+                    if k in b_metrics:
+                        metrics_accum[k] += b_metrics[k] * images.size(0)
 
         mean_loss = float(total_loss / max(total_samples, 1))
         client_eval = {k: float(v / max(total_samples, 1)) for k, v in metrics_accum.items()}
